@@ -1,0 +1,46 @@
+{
+  "system": {
+    "name": "Internal LLM Knowledge Hub",
+    "version": "1.0.0",
+    "debug": false
+  },
+  "llm": {
+    "provider": "ollama",
+    "defaultModel": "llama3",
+    "availableModels": ["llama3", "mistral", "gemma", "phi3"],
+    "contextWindow": 8192,
+    "temperature": 0.7,
+    "topP": 0.9,
+    "maxTokens": 2048
+  },
+  "vectorDb": {
+    "provider": "chroma",
+    "embeddingModel": "all-MiniLM-L6-v2",
+    "dimensions": 384,
+    "similarityMetric": "cosine"
+  },
+  "documentProcessing": {
+    "chunkSize": 1000,
+    "chunkOverlap": 200,
+    "maxDocumentSizeMb": 50,
+    "supportedFormats": [
+      "pdf", "md", "txt", "docx", "html", "csv", "json"
+    ],
+    "extractImages": true,
+    "ocrEnabled": true
+  },
+  "ui": {
+    "theme": "light",
+    "availableThemes": ["light", "dark", "system"],
+    "defaultView": "chat",
+    "showSources": true,
+    "maxHistoryItems": 50
+  },
+  "security": {
+    "multiUserMode": true,
+    "allowSignup": false,
+    "sessionTimeoutMinutes": 60,
+    "rateLimitRequests": 100,
+    "rateLimitWindow": "15m"
+  }
+}

@@ -1,0 +1,47 @@
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: anythingllm
+    ports:
+      - "3000:3000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_BASE_PATH=/api
+      - VECTOR_DB=chroma
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - UID=1000
+      - GID=1000
+      - STORAGE_DIR=/app/server/storage
+      - NODE_ENV=production
+      - SERVER_PORT=3000
+      - DATABASE_CLIENT=sqlite3
+      - DATABASE_URL=/app/server/storage/anythingllm.db
+    volumes:
+      - ./data/anythingllm/storage:/app/server/storage
+      - ./data/anythingllm/data:/app/server/data
+      - ./data/anythingllm/logs:/app/server/logs
+    depends_on:
+      - ollama
+      - chromadb
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./data/ollama:/root/.ollama
+    restart: unless-stopped
+
+  chromadb:
+    image: ghcr.io/chroma-core/chroma:latest
+    container_name: chromadb
+    volumes:
+      - ./data/chromadb:/chroma/chroma
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

@@ -40,20 +40,37 @@ git clone https://github.com/yourusername/internal-llm-knowledge-hub.git
 cd internal-llm-knowledge-hub
 ```
 
-### 2. Configure environment variables
+### 2. Install Ollama and pull Qwen2.5 model
+
+Ensure you have Ollama installed. If not, follow the instructions on the [Ollama website](https://ollama.ai/download).
+
+**Important:** After installing Ollama, you need to manually pull the Qwen2.5 model:
+
+```bash
+ollama pull qwen2.5
+```
+
+### 3. Configure environment variables
 
 ```bash
 cp .env.example .env
 # Edit .env file with your preferred settings
 ```
 
-### 3. Start the services
+The `.env` file contains various configuration options:
+
+-   `LLM_MODEL`: Specifies the LLM model to use (default: `llama3`). Other options include `qwen2.5`, `mistral`, `gemma`, `phi3`, etc.
+-   `EMBEDDING_MODEL`: Specifies the embedding model to use.
+-   `VECTOR_DB_PATH`: Specifies the path to the vector database.
+-   `PORT`: Specifies the port for the web interface (default: `3000`).
+
+### 4. Start the services
 
 ```bash
 docker-compose up -d
 ```
 
-### 4. Access the web interface
+### 5. Access the web interface
 
 Open your browser and navigate to `http://localhost:3000`
 
@@ -82,15 +99,16 @@ The system supports various document formats including:
 
 ### Adding Documents
 
-1. Navigate to the web interface at `http://localhost:3000`
-2. Go to the "Documents" section
-3. Upload your documents or connect to document sources
+1.  Navigate to the web interface at `http://localhost:3000`
+2.  Go to the "Documents" section
+3.  Upload your documents or connect to document sources. Supported formats include PDF, Markdown, Text files, Word documents, and HTML.
+4.  Wait for the documents to be processed and indexed.
 
 ### Querying Your Knowledge Base
 
-1. Go to the "Chat" section in the web interface
-2. Type your question in natural language
-3. The system will retrieve relevant information from your documents
+1.  Go to the "Chat" section in the web interface
+2.  Type your question in natural language. Be specific with your queries to get the best results.
+3.  The system will retrieve relevant information from your documents and provide an answer.
 
 ## Development
 
@@ -135,9 +153,11 @@ docker-compose up -d
 
 ### Common Issues
 
-- **System is slow**: Try using a smaller LLM model or increase RAM allocation
-- **Document processing fails**: Check supported formats and file size limits
-- **Search results are irrelevant**: Adjust the similarity threshold in settings
+-   **Ollama model not found**: Ensure the specified model in `.env` is installed (`ollama pull <model_name>`).
+-   **Web interface not accessible**: Check if the Docker containers are running and the port is not blocked by a firewall.
+-   **Slow performance**: Try using a smaller LLM model or increase RAM allocation to the Docker containers.
+-   **Document processing fails**: Verify that the document format is supported and the file size is within the limits.
+-   **Search results are irrelevant**: Adjust the similarity threshold in the settings or try re-indexing the documents.
 
 ## Contributing
 

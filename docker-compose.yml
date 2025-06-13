@@ -1,15 +1,14 @@
 services:
   anythingllm:
-    image: mintplexlabs/anythingllm:latest
+    image: mintplexlabs/anythingllm:1.8.0
     container_name: anythingllm
     ports:
       - "3000:3000"
     environment:
       - OLLAMA_HOST=http://ollama:11434
-      - OLLAMA_BASE_PATH=/api
-      - VECTOR_DB=chroma
-      - CHROMA_HOST=chromadb
-      - CHROMA_PORT=8000
+      - OLLAMA_BASE_PATH=http://ollama:11434
+      - VECTOR_DB=lancedb
+      - LANCE_DB_PATH=/app/server/storage/vector-storage
       - UID=1000
       - GID=1000
       - STORAGE_DIR=/app/server/storage
@@ -23,7 +22,6 @@ services:
       - ./data/anythingllm/logs:/app/server/logs
     depends_on:
       - ollama
-      - chromadb
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -36,12 +34,5 @@ services:
     volumes:
       - ./data/ollama:/root/.ollama
     restart: unless-stopped
-
-  chromadb:
-    image: ghcr.io/chroma-core/chroma:latest
-    container_name: chromadb
-    volumes:
-      - ./data/chromadb:/chroma/chroma
-    ports:
-      - "8000:8000"
-    restart: unless-stopped
+    entrypoint: ["/bin/ollama", "serve"]
+    command: null
